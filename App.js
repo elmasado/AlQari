@@ -4,6 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useColorScheme } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
 import { useFonts } from 'expo-font';
+import { AudioProvider } from './contexts/AudioContext';
 import ReadingScreen from './screens/ReadingScreen';
 import SearchScreen from './screens/SearchScreen';
 
@@ -61,19 +62,21 @@ export default function App() {
   };
 
   return (
-    <NavigationContainer theme={colorScheme === 'dark' ? darkTheme : lightTheme}>
-      <Tab.Navigator>
-        <Tab.Screen 
-          name="Read" 
-          component={ReadingScreen} 
-          options={{ title: 'قراءة' }} 
-        />
-        <Tab.Screen 
-          name="Search" 
-          component={SearchScreen} 
-          options={{ title: 'بحث' }}
-        />
-      </Tab.Navigator>
-    </NavigationContainer>
+    <AudioProvider>
+      <NavigationContainer theme={colorScheme === 'dark' ? darkTheme : lightTheme}>
+        <Tab.Navigator>
+          <Tab.Screen 
+            name="Read" 
+            component={ReadingScreen} 
+            options={{ title: 'قراءة' }} 
+          />
+          <Tab.Screen 
+            name="Search" 
+            component={SearchScreen} 
+            options={{ title: 'بحث' }}
+          />
+        </Tab.Navigator>
+      </NavigationContainer>
+    </AudioProvider>
   );
 }
