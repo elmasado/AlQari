@@ -1,26 +1,45 @@
 /**
  * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
+ * These palettes aim for a soothing and elegant reading experience.
  */
 
-const tintColorLight = '#0a7ea4';
-const tintColorDark = '#fff';
+// Light Mode Palette
+const lightBackground = '#F8F5F2'; // Soft off-white/beige
+const lightText = '#4A443F'; // Dark, warm gray
+const lightPrimary = '#6D8B74'; // Muted green
+const lightSecondary = '#A89E96'; // Lighter warm gray
+const lightAccent = '#D4AC87'; // Soft gold/tan
+
+// Dark Mode Palette
+const darkBackground = '#2C2A28'; // Very dark, warm gray
+const darkText = '#EAE3DC'; // Light off-white/beige
+const darkPrimary = '#A3C9A8'; // Lighter muted green
+const darkSecondary = '#8A817A'; // Medium warm gray
+const darkAccent = '#E8CBAA'; // Lighter soft gold/tan
 
 export const Colors = {
   light: {
-    text: '#11181C',
-    background: '#fff',
-    tint: tintColorLight,
-    icon: '#687076',
-    tabIconDefault: '#687076',
-    tabIconSelected: tintColorLight,
+    text: lightText,
+    background: lightBackground,
+    tint: lightPrimary,
+    icon: lightSecondary,
+    tabIconDefault: lightSecondary,
+    tabIconSelected: lightPrimary,
+    secondaryText: lightSecondary,
+    accent: lightAccent,
+    cardBackground: '#FFFFFF', // Slightly brighter card background for contrast
+    borderColor: '#E0D8D1', // Subtle border color
   },
   dark: {
-    text: '#ECEDEE',
-    background: '#151718',
-    tint: tintColorDark,
-    icon: '#9BA1A6',
-    tabIconDefault: '#9BA1A6',
-    tabIconSelected: tintColorDark,
+    text: darkText,
+    background: darkBackground,
+    tint: darkPrimary,
+    icon: darkSecondary,
+    tabIconDefault: darkSecondary,
+    tabIconSelected: darkPrimary,
+    secondaryText: darkSecondary,
+    accent: darkAccent,
+    cardBackground: '#3A3734', // Slightly lighter card background for contrast
+    borderColor: '#4F4A45', // Subtle border color
   },
 };

@@ -63,8 +63,16 @@ export default function App() {
   return (
     <NavigationContainer theme={colorScheme === 'dark' ? darkTheme : lightTheme}>
       <Tab.Navigator>
-        <Tab.Screen name="Read" component={ReadingScreen} />
-        <Tab.Screen name="Search" component={SearchScreen} />
+        <Tab.Screen 
+          name="Read" 
+          component={ReadingScreen} 
+          options={{ title: 'قراءة' }} 
+        />
+        <Tab.Screen 
+          name="Search" 
+          component={SearchScreen} 
+          options={{ title: 'بحث' }}
+        />
       </Tab.Navigator>
     </NavigationContainer>
   );

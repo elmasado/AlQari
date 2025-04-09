@@ -15,7 +15,7 @@ export default function SearchScreen() {
     <View style={styles.container}>
       <TextInput
         style={styles.input}
-        placeholder="Search..."
+        placeholder="بحث..."
         value={query}
         onChangeText={setQuery}
         onSubmitEditing={handleSearch}
