@@ -1,41 +1,47 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import AudioPlayer from './AudioPlayer';
+import { useAudio } from '../contexts/AudioContext';
 
 export default function VerseItem({ verse }) {
-  const [isPlaying, setIsPlaying] = useState(false);
   const cardBackgroundColor = useThemeColor({}, 'cardBackground');
   const textColor = useThemeColor({}, 'text');
   const secondaryTextColor = useThemeColor({}, 'secondaryText');
   const borderColor = useThemeColor({}, 'borderColor');
+  const tintColor = useThemeColor({}, 'tint');
 
+  const { isPlaying, currentVerseKey } = useAudio();
+  
   // Get the first available audio URL
   const audioUrl = verse.linkmp3?.[0]?.source || '';
-  
-  // Create a unique ID for the verse using verse_key or verse_number
-  const verseId = verse.verse_key || `verse-${verse.verse_number}`;
-
-  // Extract verse number (assuming it's part of verse_key like "1:1")
-  const verseNumber = verse.verse_number || ''; // Fallback if verse_key format differs or verse_number exists
+  const verseKey = verse.verse_key || `verse-${verse.verse_number}`;
+  const isCurrentVerse = currentVerseKey === verseKey && isPlaying;
 
   return (
-    <View style={[styles.container, { backgroundColor: cardBackgroundColor, borderColor }]}>
+    <View 
+      style={[
+        styles.container, 
+        { 
+          backgroundColor: cardBackgroundColor, 
+          borderColor: isCurrentVerse ? tintColor : borderColor,
+          borderWidth: isCurrentVerse ? 2 : StyleSheet.hairlineWidth,
+        }
+      ]}
+    >
       <View style={styles.headerContainer}>
         {audioUrl && (
           <AudioPlayer
             audioUrl={audioUrl}
-            verseId={verseId}
-            isPlaying={isPlaying}
-            onPlayPause={setIsPlaying}
+            verseKey={verseKey}
           />
         )}
         <View style={styles.arabicContainer}>
           <Text style={[styles.arabic, { color: textColor }]}>
             {verse.verse}
-            {verseNumber && (
+            {verse.verse_number && (
               <Text style={[styles.verseNumber, { color: secondaryTextColor }]}>
-                {' '}({verseNumber})
+                {' '}({verse.verse_number})
               </Text>
             )}
           </Text>
@@ -51,7 +57,6 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     padding: 15,
     borderRadius: 8,
-    borderWidth: StyleSheet.hairlineWidth,
   },
   headerContainer: {
     flexDirection: 'row',
