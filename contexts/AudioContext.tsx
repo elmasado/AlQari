@@ -1,16 +1,23 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
 import { Audio } from 'expo-av';
-import { parseTimeSegment } from '../utils/audioUtils';
+import { parseTimeSegment, TimeSegment } from '../utils/audioUtils';
+
+interface VerseAudio {
+  verseKey: string;
+  audioUrl: string;
+}
 
 interface AudioState {
   isPlaying: boolean;
   currentVerseKey: string | null;
   currentSound: Audio.Sound | null;
   timeSegment: { start: number; end: number } | null;
+  playlist: VerseAudio[];
+  currentIndex: number;
 }
 
-interface AudioContextType extends AudioState {
-  loadAndPlayVerse: (verseKey: string, audioUrl: string) => Promise<void>;
+interface AudioContextType extends Omit<AudioState, 'playlist'> {
+  loadAndPlayVerse: (verseKey: string, audioUrl: string, playlist: VerseAudio[]) => Promise<void>;
   pausePlayback: () => Promise<void>;
   resumePlayback: () => Promise<void>;
   stopPlayback: () => Promise<void>;
@@ -24,7 +31,17 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
     currentVerseKey: null,
     currentSound: null,
     timeSegment: null,
+    playlist: [],
+    currentIndex: -1,
   });
+
+  const playNext = useCallback(async () => {
+    const nextIndex = audioState.currentIndex + 1;
+    if (nextIndex < audioState.playlist.length) {
+      const nextVerse = audioState.playlist[nextIndex];
+      await loadAndPlayVerse(nextVerse.verseKey, nextVerse.audioUrl, audioState.playlist);
+    }
+  }, [audioState.currentIndex, audioState.playlist]);
 
   const stopPlayback = useCallback(async () => {
     if (audioState.currentSound) {
@@ -37,38 +54,57 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
       currentSound: null,
       currentVerseKey: null,
       timeSegment: null,
+      currentIndex: -1,
     }));
   }, [audioState.currentSound]);
 
-  const loadAndPlayVerse = useCallback(async (verseKey: string, audioUrl: string) => {
-    // Stop current playback if any
+  const loadAndPlayVerse = useCallback(async (verseKey: string, audioUrl: string, playlist: VerseAudio[]) => {
     await stopPlayback();
 
+    const currentIndex = playlist.findIndex(v => v.verseKey === verseKey);
     const timeSegment = parseTimeSegment(audioUrl);
-    const { sound: newSound } = await Audio.Sound.createAsync(
-      { uri: audioUrl },
-      { 
-        shouldPlay: true,
-        positionMillis: timeSegment?.start || 0,
-      }
-    );
+    
+    if (!timeSegment) {
+      console.error('Invalid time segment in URL:', audioUrl);
+      return;
+    }
 
-    newSound.setOnPlaybackStatusUpdate((status) => {
-      if (!status.isLoaded) return;
+    try {
+      const { sound: newSound } = await Audio.Sound.createAsync(
+        { uri: timeSegment.baseUrl },
+        { 
+          shouldPlay: true,
+          positionMillis: timeSegment.start,
+        }
+      );
 
-      if (status.didJustFinish || 
-          (timeSegment?.end && status.positionMillis >= timeSegment.end)) {
-        stopPlayback();
-      }
-    });
+      newSound.setOnPlaybackStatusUpdate((status) => {
+        if (!status.isLoaded) return;
 
-    setAudioState({
-      isPlaying: true,
-      currentVerseKey: verseKey,
-      currentSound: newSound,
-      timeSegment,
-    });
-  }, [stopPlayback]);
+        // Vérifier si nous avons atteint la fin du segment
+        if (status.positionMillis >= timeSegment.end) {
+          playNext();
+          return;
+        }
+
+        if (status.didJustFinish) {
+          playNext();
+        }
+      });
+
+      setAudioState(prev => ({
+        ...prev,
+        isPlaying: true,
+        currentVerseKey: verseKey,
+        currentSound: newSound,
+        timeSegment,
+        playlist,
+        currentIndex,
+      }));
+    } catch (error) {
+      console.error('Error loading audio:', error);
+    }
+  }, [stopPlayback, playNext]);
 
   const pausePlayback = useCallback(async () => {
     if (audioState.currentSound) {
@@ -87,7 +123,11 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
   return (
     <AudioContext.Provider
       value={{
-        ...audioState,
+        isPlaying: audioState.isPlaying,
+        currentVerseKey: audioState.currentVerseKey,
+        currentSound: audioState.currentSound,
+        timeSegment: audioState.timeSegment,
+        currentIndex: audioState.currentIndex,
         loadAndPlayVerse,
         pausePlayback,
         resumePlayback,

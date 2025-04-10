@@ -1,18 +1,30 @@
-interface TimeSegment {
+export interface TimeSegment {
   start: number;
   end: number;
+  baseUrl: string;
 }
 
 export function parseTimeSegment(url: string): TimeSegment | null {
-  const timeRegex = /#t=(\d+\.?\d*),(\d+\.?\d*)/;
-  const match = url.match(timeRegex);
-  
-  if (!match) return null;
-  
-  return {
-    start: parseFloat(match[1]) * 1000, // Convert to milliseconds
-    end: parseFloat(match[2]) * 1000
-  };
+  // Séparation de l'URL de base et du segment temporel
+  const [baseUrl, timeSegment] = url.split('#t=');
+  if (!timeSegment) return null;
+
+  try {
+    const [startStr, endStr] = timeSegment.split(',');
+    const start = parseFloat(startStr) * 1000; // Conversion en millisecondes
+    const end = parseFloat(endStr) * 1000;
+
+    if (isNaN(start) || isNaN(end)) return null;
+
+    return {
+      start,
+      end,
+      baseUrl
+    };
+  } catch (error) {
+    console.error('Error parsing time segment:', error);
+    return null;
+  }
 }
 
 export function formatTime(milliseconds: number): string {

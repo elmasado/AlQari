@@ -44,14 +44,18 @@ export default function ReadingScreen() {
     );
   }
 
+  const playlist = verses.map(verse => ({
+    verseKey: verse.verse_key || `verse-${verse.verse_number}`,
+    audioUrl: verse.linkmp3?.[1]?.source || '',
+  })).filter(item => item.audioUrl);
+  console.log("playlist: ", playlist);
   return (
     <View style={[styles.container, { backgroundColor }]}>
       <Text style={[styles.surahTitle, { color: textColor }]}>سورة {surah}</Text>
       <FlatList
         data={verses}
-        // Use a more reliable key like verse_key if available, fallback to verse number
         keyExtractor={(item) => item.verse_key ?? `verse-${item.verse_number}`}
-        renderItem={({ item }) => <VerseItem verse={item} />}
+        renderItem={({ item }) => <VerseItem verse={item} playlist={playlist} />}
         contentContainerStyle={styles.listContentContainer}
         ItemSeparatorComponent={() => <View style={[styles.separator, { backgroundColor: borderColor }]} />}
         ListEmptyComponent={<Text style={[styles.emptyText, { color: secondaryTextColor }]}>No verses found for this Surah.</Text>} // Handle empty state
