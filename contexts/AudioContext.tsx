@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import React, { createContext, useContext, useState, useCallback, useRef } from 'react';
+import { AppState } from 'react-native';
 import { Audio } from 'expo-av';
 import { parseTimeSegment, TimeSegment } from '../utils/audioUtils';
 
@@ -11,7 +12,7 @@ interface AudioState {
   isPlaying: boolean;
   currentVerseKey: string | null;
   currentSound: Audio.Sound | null;
-  timeSegment: { start: number; end: number } | null;
+  timeSegment: TimeSegment | null;
   playlist: VerseAudio[];
   currentIndex: number;
 }
@@ -35,76 +36,144 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
     currentIndex: -1,
   });
 
-  const playNext = useCallback(async () => {
-    const nextIndex = audioState.currentIndex + 1;
-    if (nextIndex < audioState.playlist.length) {
-      const nextVerse = audioState.playlist[nextIndex];
-      await loadAndPlayVerse(nextVerse.verseKey, nextVerse.audioUrl, audioState.playlist);
-    }
-  }, [audioState.currentIndex, audioState.playlist]);
+  // Ajouter une référence pour suivre l'état actuel
+  const audioStateRef = useRef(audioState);
+
+  // Mettre à jour la référence quand l'état change
+  React.useEffect(() => {
+    audioStateRef.current = audioState;
+  }, [audioState]);
+
 
   const stopPlayback = useCallback(async () => {
-    if (audioState.currentSound) {
-      await audioState.currentSound.stopAsync();
-      await audioState.currentSound.unloadAsync();
+    const currentState = audioStateRef.current;
+
+    if (currentState.currentSound) {
+      await currentState.currentSound.stopAsync();
+      await currentState.currentSound.unloadAsync();
+      setAudioState(prev => ({
+        ...prev,
+        isPlaying: false,
+        currentVerseKey: null,
+        currentSound: null,
+        timeSegment: null,
+        currentIndex: -1,
+      }));
     }
-    setAudioState(prev => ({
-      ...prev,
-      isPlaying: false,
-      currentSound: null,
-      currentVerseKey: null,
-      timeSegment: null,
-      currentIndex: -1,
-    }));
   }, [audioState.currentSound]);
 
-  const loadAndPlayVerse = useCallback(async (verseKey: string, audioUrl: string, playlist: VerseAudio[]) => {
-    await stopPlayback();
 
-    const currentIndex = playlist.findIndex(v => v.verseKey === verseKey);
+  const loadAndPlayVerse = useCallback(async (verseKey: string, audioUrl: string, playlist: VerseAudio[]) => {
     const timeSegment = parseTimeSegment(audioUrl);
-    
     if (!timeSegment) {
       console.error('Invalid time segment in URL:', audioUrl);
       return;
     }
 
+    const currentIndex = playlist.findIndex(v => v.verseKey === verseKey);
     try {
-      const { sound: newSound } = await Audio.Sound.createAsync(
-        { uri: timeSegment.baseUrl },
-        { 
-          shouldPlay: true,
-          positionMillis: timeSegment.start,
+      // Vérifier si l'application est en premier plan
+      if (AppState.currentState !== 'active') {
+        console.warn('App is not active, cannot play audio');
+        return;
+      }
+
+      const currentState = audioStateRef.current;
+      let sound = currentState.currentSound;
+
+      const isSameAudio = sound &&
+        currentState.timeSegment?.baseUrl === timeSegment.baseUrl;
+
+      if (isSameAudio && sound) {
+        try {
+          await sound.setPositionAsync(timeSegment.start);
+          await sound.playAsync();
+          console.log('Playing same audio:', verseKey, " / ", timeSegment);
+          setAudioState(prev => ({
+            ...prev,
+            isPlaying: true,
+            currentVerseKey: verseKey,
+            timeSegment: timeSegment,
+            playlist,
+            currentIndex,
+          }));
+        } catch (error) {
+          console.error('Error playing same audio:', error);
+          await stopPlayback();
         }
-      );
-
-      newSound.setOnPlaybackStatusUpdate((status) => {
-        if (!status.isLoaded) return;
-
-        // Vérifier si nous avons atteint la fin du segment
-        if (status.positionMillis >= timeSegment.end) {
-          playNext();
-          return;
+      } else {
+        if (sound) {
+          await sound.unloadAsync();
         }
 
-        if (status.didJustFinish) {
-          playNext();
-        }
-      });
+        try {
+          const { sound: newSound } = await Audio.Sound.createAsync(
+            { uri: timeSegment.baseUrl },
+            { shouldPlay: true, positionMillis: timeSegment.start }
+          );
 
-      setAudioState(prev => ({
-        ...prev,
-        isPlaying: true,
-        currentVerseKey: verseKey,
-        currentSound: newSound,
-        timeSegment,
-        playlist,
-        currentIndex,
-      }));
+          sound = newSound;
+
+          sound.setOnPlaybackStatusUpdate(async (status) => {
+            if (!status.isLoaded) return;
+
+            const currentState = audioStateRef.current;
+            if (currentState && currentState.timeSegment)
+              console.log('Playback status:', status.positionMillis, ' / ', currentState.timeSegment.end);
+            // || status.didJustFinish
+            if ((currentState.timeSegment && status.positionMillis >= currentState.timeSegment.end)) {
+              const nextIndex = currentState.currentIndex + 1;
+              console.log('Next index:', nextIndex, " / ", currentState.playlist.length);
+              if (nextIndex < currentState.playlist.length) {
+                const nextVerse = currentState.playlist[nextIndex];
+                // Ajouter un délai court avant de charger le prochain verset
+                setTimeout(async () => {
+                  try {
+                    if (AppState.currentState === 'active') {
+                      const timeSegment = parseTimeSegment(nextVerse.audioUrl);
+                      setAudioState(prev => ({
+                        ...prev,
+                        isPlaying: true,
+                        currentVerseKey: nextVerse.verseKey,
+                        timeSegment: timeSegment,
+                        currentIndex: nextIndex,
+                      }));
+                      // await loadAndPlayVerse(
+                      //   nextVerse.verseKey,
+                      //   nextVerse.audioUrl,
+                      //   currentState.playlist
+                      // );
+                    }
+                  } catch (error) {
+                    console.error('Error loading next verse:', error);
+                    await stopPlayback();
+                  }
+                }, 100);
+              } else {
+                await stopPlayback();
+              }
+            }
+          });
+
+          setAudioState(prev => ({
+            ...prev,
+            isPlaying: true,
+            currentVerseKey: verseKey,
+            currentSound: newSound,
+            timeSegment,
+            playlist,
+            currentIndex,
+          }));
+        } catch (error) {
+          console.error('Error creating new audio:', error);
+          await stopPlayback();
+        }
+      }
     } catch (error) {
-      console.error('Error loading audio:', error);
+      console.error('Error in loadAndPlayVerse:', error);
+      await stopPlayback();
     }
-  }, [stopPlayback, playNext]);
+  }, [stopPlayback]);
 
   const pausePlayback = useCallback(async () => {
     if (audioState.currentSound) {

@@ -6,6 +6,7 @@ import { useThemeColor } from '@/hooks/useThemeColor'; // Using alias setup
 
 export default function ReadingScreen() {
   const [verses, setVerses] = useState([]);
+  const [title, setTitle] = useState("");
   const [surah, setSurah] = useState(1);
   const [loading, setLoading] = useState(true); // Add loading state
 
@@ -13,14 +14,15 @@ export default function ReadingScreen() {
     setLoading(true); // Set loading true when fetching starts
     fetchSurah(surah).then(data => {
       // Ensure data and data.verses exist before setting state
-      if(data && data.verses) {
+      if (data && data.verses) {
         const verses = data.verses.map((verse, index) => ({
           ...verse,
           verse_number: index + 1
-      }));
-      setVerses(verses);
-      setLoading(false); // Set loading false when data is fetched
-    }
+        }));
+        setTitle(data.titleAr);
+        setVerses(verses);
+        setLoading(false); // Set loading false when data is fetched
+      }
     }).catch(error => {
       console.error("Failed to fetch surah:", error);
       setVerses([]); // Clear verses on error
@@ -48,10 +50,9 @@ export default function ReadingScreen() {
     verseKey: verse.verse_key || `verse-${verse.verse_number}`,
     audioUrl: verse.linkmp3?.[1]?.source || '',
   })).filter(item => item.audioUrl);
-  console.log("playlist: ", playlist);
   return (
     <View style={[styles.container, { backgroundColor }]}>
-      <Text style={[styles.surahTitle, { color: textColor }]}>سورة {surah}</Text>
+      <Text style={[styles.surahTitle, { color: textColor }]}>سورة {title}</Text>
       <FlatList
         data={verses}
         keyExtractor={(item) => item.verse_key ?? `verse-${item.verse_number}`}

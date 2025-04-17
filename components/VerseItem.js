@@ -12,13 +12,12 @@ export default function VerseItem({ verse, playlist }) {
   const tintColor = useThemeColor({}, 'tint');
 
   const { isPlaying, currentVerseKey } = useAudio();
-  console.log("isPlaying: ", isPlaying);
-  console.log("currentVerseKey: ", currentVerseKey);
+  // console.log('Current Verse Key:', currentVerseKey);
   // Get the first available audio URL
   const audioUrl = verse.linkmp3?.[1]?.source || '';
   const verseKey = verse.verse_key || `verse-${verse.verse_number}`;
   const isCurrentVerse = currentVerseKey === verseKey && isPlaying;
-
+  
   return (
     <View style={[styles.container, { 
         backgroundColor: cardBackgroundColor, 
