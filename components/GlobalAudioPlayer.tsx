@@ -1,17 +1,14 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { useAudio } from '../contexts/AudioContext';
 
-interface AudioPlayerProps {
-  audioUrl: string;
-  verseKey: string;
+interface GlobalAudioPlayerProps {
   playlist: Array<{ verseKey: string; audioUrl: string; }>;
-  isGlobal?: boolean;
 }
 
-export default function AudioPlayer({ audioUrl, verseKey, playlist, isGlobal = false }: AudioPlayerProps) {
+export default function GlobalAudioPlayer({ playlist }: GlobalAudioPlayerProps) {
   const tintColor = useThemeColor({}, 'tint');
   const { 
     isPlaying, 
@@ -21,31 +18,27 @@ export default function AudioPlayer({ audioUrl, verseKey, playlist, isGlobal = f
     resumePlayback 
   } = useAudio();
 
-  const isCurrentVerse = currentVerseKey === verseKey;
-
-  const handlePress = useCallback(async () => {
+  const handlePress = async () => {
     try {
-      if (!isCurrentVerse) {
-        if (!audioUrl.includes('#t=')) {
-          console.error('Invalid audio URL format:', audioUrl);
-          return;
-        }
-        await loadAndPlayVerse(verseKey, audioUrl, playlist);
+      if (!currentVerseKey) {
+        // Start playing from the first verse
+        const firstVerse = playlist[0];
+        await loadAndPlayVerse(firstVerse.verseKey, firstVerse.audioUrl, playlist);
       } else if (isPlaying) {
         await pausePlayback();
       } else {
         await resumePlayback();
       }
     } catch (error) {
-      console.error('Error handling audio playback:', error);
+      console.error('Error handling global audio playback:', error);
     }
-  }, [isCurrentVerse, isPlaying, audioUrl, verseKey, playlist, loadAndPlayVerse, pausePlayback, resumePlayback]);
+  };
 
   return (
     <TouchableOpacity onPress={handlePress} style={styles.button}>
       <FontAwesome
-        name={isCurrentVerse && isPlaying ? 'pause' : 'play'}
-        size={isGlobal ? 24 : 20}
+        name={isPlaying ? 'pause' : 'play'}
+        size={24}
         color={tintColor}
       />
     </TouchableOpacity>

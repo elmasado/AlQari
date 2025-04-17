@@ -3,6 +3,7 @@ import { View, Text, FlatList, StyleSheet, TouchableOpacity, ActivityIndicator }
 import VerseItem from '../components/VerseItem';
 import { fetchSurah } from '../utils/api';
 import { useThemeColor } from '@/hooks/useThemeColor'; // Using alias setup
+import GlobalAudioPlayer from '../components/GlobalAudioPlayer';
 
 export default function ReadingScreen() {
   const [verses, setVerses] = useState([]);
@@ -52,7 +53,10 @@ export default function ReadingScreen() {
   })).filter(item => item.audioUrl);
   return (
     <View style={[styles.container, { backgroundColor }]}>
-      <Text style={[styles.surahTitle, { color: textColor }]}>سورة {title}</Text>
+      <View style={styles.titleContainer}>
+        <GlobalAudioPlayer playlist={playlist} />
+        <Text style={[styles.surahTitle, { color: textColor }]}>سورة {title}</Text>
+      </View>
       <FlatList
         data={verses}
         keyExtractor={(item) => item.verse_key ?? `verse-${item.verse_number}`}
@@ -85,12 +89,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  titleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: 20,
+    paddingHorizontal: 20,
+  },
   surahTitle: {
     fontSize: 24,
-    fontFamily: 'Roboto-Bold', // Use custom font
+    fontFamily: 'Roboto-Bold',
     textAlign: 'center',
-    marginVertical: 20, // Increased vertical margin
-    paddingHorizontal: 20,
+    flex: 1,
   },
   listContentContainer: {
     paddingHorizontal: 20, // Consistent horizontal padding
