@@ -9,7 +9,7 @@ import { useAudio } from '../contexts/AudioContext';
 export default function ReadingScreen() {
   const [verses, setVerses] = useState([]);
   const [title, setTitle] = useState("");
-  const [surah, setSurah] = useState(3);
+  const [surah, setSurah] = useState(1);
   const [loading, setLoading] = useState(true); // Add loading state
   const {
     stopPlayback

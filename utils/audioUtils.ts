@@ -33,3 +33,22 @@ export function formatTime(milliseconds: number): string {
   const seconds = totalSeconds % 60;
   return `${minutes}:${seconds.toString().padStart(2, '0')}`;
 }
+
+export function isHLSStream(url: string): boolean {
+  return url.endsWith('.m3u8');
+}
+
+export function getAudioSource(url: string) {
+  if (isHLSStream(url)) {
+    return { uri: url };
+  }
+  
+  const timeSegment = parseTimeSegment(url);
+  if (!timeSegment) return null;
+  
+  return {
+    uri: timeSegment.baseUrl,
+    positionMillis: timeSegment.start,
+    shouldPlay: true
+  };
+}

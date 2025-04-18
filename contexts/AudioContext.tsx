@@ -65,7 +65,6 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
 
   const loadAndPlayVerse = useCallback(async (verseKey: string, audioUrl: string, playlist: VerseAudio[]) => {
     const timeSegment = parseTimeSegment(audioUrl);
-    console.log('Parsed time segment:', timeSegment);
     if (!timeSegment) {
       console.error('Invalid time segment in URL:', audioUrl);
       return;
@@ -108,6 +107,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
         }
 
         try {
+          console.log('Loading new audio:', verseKey, " / ", timeSegment);
           const { sound: newSound } = await Audio.Sound.createAsync(
             { uri: timeSegment.baseUrl },
             { shouldPlay: true, positionMillis: timeSegment.start }
@@ -132,6 +132,9 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
                   try {
                     if (AppState.currentState === 'active') {
                       const timeSegment = parseTimeSegment(nextVerse.audioUrl);
+                      if (!timeSegment) {
+                        throw new Error('Invalid time segment');
+                      }
                       setAudioState(prev => ({
                         ...prev,
                         isPlaying: true,
