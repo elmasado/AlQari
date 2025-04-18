@@ -65,6 +65,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
 
   const loadAndPlayVerse = useCallback(async (verseKey: string, audioUrl: string, playlist: VerseAudio[]) => {
     const timeSegment = parseTimeSegment(audioUrl);
+    console.log('Parsed time segment:', timeSegment);
     if (!timeSegment) {
       console.error('Invalid time segment in URL:', audioUrl);
       return;

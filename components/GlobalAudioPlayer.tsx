@@ -9,7 +9,7 @@ interface GlobalAudioPlayerProps {
 }
 
 export default function GlobalAudioPlayer({ playlist }: GlobalAudioPlayerProps) {
-  const tintColor = useThemeColor({}, 'tint');
+  const tintColor = useThemeColor({}, 'accent');
   const { 
     isPlaying, 
     currentVerseKey,
@@ -37,8 +37,8 @@ export default function GlobalAudioPlayer({ playlist }: GlobalAudioPlayerProps) 
   return (
     <TouchableOpacity onPress={handlePress} style={styles.button}>
       <FontAwesome
-        name={isPlaying ? 'pause' : 'play'}
-        size={24}
+        name={isPlaying ? 'pause-circle-o' : 'play-circle-o'}
+        size={30}
         color={tintColor}
       />
     </TouchableOpacity>
@@ -48,5 +48,7 @@ export default function GlobalAudioPlayer({ playlist }: GlobalAudioPlayerProps) 
 const styles = StyleSheet.create({
   button: {
     padding: 10,
+       
+  
   },
 });

@@ -4,13 +4,16 @@ import VerseItem from '../components/VerseItem';
 import { fetchSurah } from '../utils/api';
 import { useThemeColor } from '@/hooks/useThemeColor'; // Using alias setup
 import GlobalAudioPlayer from '../components/GlobalAudioPlayer';
+import { useAudio } from '../contexts/AudioContext';
 
 export default function ReadingScreen() {
   const [verses, setVerses] = useState([]);
   const [title, setTitle] = useState("");
-  const [surah, setSurah] = useState(1);
+  const [surah, setSurah] = useState(3);
   const [loading, setLoading] = useState(true); // Add loading state
-
+  const {
+    stopPlayback
+  } = useAudio();
   useEffect(() => {
     setLoading(true); // Set loading true when fetching starts
     fetchSurah(surah).then(data => {
@@ -68,14 +71,20 @@ export default function ReadingScreen() {
       <View style={[styles.buttonContainer, { borderTopColor: borderColor }]}>
         <TouchableOpacity
           style={[styles.button, { backgroundColor: cardBackgroundColor, borderColor }]}
-          onPress={() => setSurah(Math.max(1, surah - 1))}
+          onPress={() => {
+            stopPlayback(); // Stop playback when changing surah
+            setSurah(Math.max(1, surah - 1))
+          }}
           disabled={surah === 1 || loading} // Disable during load or at first surah
         >
           <Text style={[styles.buttonText, { color: (surah === 1 || loading) ? secondaryTextColor : tintColor }]}>السابق</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.button, { backgroundColor: cardBackgroundColor, borderColor }]}
-          onPress={() => setSurah(Math.min(114, surah + 1))} // Assuming 114 Surahs
+          onPress={() => {
+            stopPlayback(); // Stop playback when changing surah
+            setSurah(Math.min(114, surah + 1))
+          }} // Assuming 114 Surahs
           disabled={surah === 114 || loading} // Disable if it's the last Surah or loading
         >
           <Text style={[styles.buttonText, { color: (surah === 114 || loading) ? secondaryTextColor : tintColor }]}>التالي</Text>
