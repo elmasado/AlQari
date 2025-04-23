@@ -16,9 +16,10 @@ export async function fetchSurah(surahNumber) {
 
 export async function searchVerses(query) {
   const response = await axios.post(
-    `${BASE_URL}/search`,
-    { query },
+    `${BASE_URL}/_search`,
+    query,
     { auth: AUTH }
   );
-  return response.data.hits.hits.map(hit => hit._source);
+  // console.log("search:", response);
+  return response.data.hits.hits.map(hit => hit);
 }

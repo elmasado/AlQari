@@ -107,7 +107,6 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
         }
 
         try {
-          console.log('Loading new audio:', verseKey, " / ", timeSegment);
           const { sound: newSound } = await Audio.Sound.createAsync(
             { uri: timeSegment.baseUrl },
             { shouldPlay: true, positionMillis: timeSegment.start }
@@ -120,11 +119,9 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
 
             const currentState = audioStateRef.current;
             if (currentState && currentState.timeSegment)
-              console.log('Playback status:', status.positionMillis, ' / ', currentState.timeSegment.end);
             // || status.didJustFinish
             if ((currentState.timeSegment && status.positionMillis >= currentState.timeSegment.end)) {
               const nextIndex = currentState.currentIndex + 1;
-              console.log('Next index:', nextIndex, " / ", currentState.playlist.length);
               if (nextIndex < currentState.playlist.length) {
                 const nextVerse = currentState.playlist[nextIndex];
                 // Ajouter un délai court avant de charger le prochain verset
