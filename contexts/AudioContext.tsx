@@ -88,7 +88,6 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
         try {
           await sound.setPositionAsync(timeSegment.start);
           await sound.playAsync();
-          console.log('Playing same audio:', verseKey, " / ", timeSegment);
           setAudioState(prev => ({
             ...prev,
             isPlaying: true,

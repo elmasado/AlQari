@@ -1,0 +1,572 @@
+[
+    {
+        "number": 1,
+        "count": 6,
+        "titleAr": "الفاتحة"
+    },
+    {
+        "number": 2,
+        "count": 286,
+        "titleAr": "البقرة"
+    },
+    {
+        "number": 3,
+        "count": 200,
+        "titleAr": "آل عمران"
+    },
+    {
+        "number": 4,
+        "count": 176,
+        "titleAr": "النساء"
+    },
+    {
+        "number": 5,
+        "count": 120,
+        "titleAr": "المائدة"
+    },
+    {
+        "number": 6,
+        "count": 165,
+        "titleAr": "الأنعام"
+    },
+    {
+        "number": 7,
+        "count": 206,
+        "titleAr": "الأعراف"
+    },
+    {
+        "number": 8,
+        "count": 75,
+        "titleAr": "الأنفال"
+    },
+    {
+        "number": 9,
+        "count": 129,
+        "titleAr": "التوبة"
+    },
+    {
+        "number": 10,
+        "count": 109,
+        "titleAr": "يونس"
+    },
+    {
+        "number": 11,
+        "count": 123,
+        "titleAr": "هود"
+    },
+    {
+        "number": 12,
+        "count": 111,
+        "titleAr": "يوسف"
+    },
+    {
+        "number": 13,
+        "count": 43,
+        "titleAr": "الرعد"
+    },
+    {
+        "number": 14,
+        "count": 52,
+        "titleAr": "إبراهيم"
+    },
+    {
+        "number": 15,
+        "count": 99,
+        "titleAr": "الحجر"
+    },
+    {
+        "number": 16,
+        "count": 128,
+        "titleAr": "النحل"
+    },
+    {
+        "number": 17,
+        "count": 111,
+        "titleAr": "الإسراء"
+    },
+    {
+        "number": 18,
+        "count": 110,
+        "titleAr": "الكهف"
+    },
+    {
+        "number": 19,
+        "count": 98,
+        "titleAr": "مريم"
+    },
+    {
+        "number": 20,
+        "count": 135,
+        "titleAr": "طه"
+    },
+    {
+        "number": 21,
+        "count": 112,
+        "titleAr": "الأنبياء"
+    },
+    {
+        "number": 22,
+        "count": 78,
+        "titleAr": "الحج"
+    },
+    {
+        "number": 23,
+        "count": 118,
+        "titleAr": "المؤمنون"
+    },
+    {
+        "number": 24,
+        "count": 64,
+        "titleAr": "النور"
+    },
+    {
+        "number": 25,
+        "count": 77,
+        "titleAr": "الفرقان"
+    },
+    {
+        "number": 26,
+        "count": 227,
+        "titleAr": "الشعراء"
+    },
+    {
+        "number": 27,
+        "count": 93,
+        "titleAr": "النمل"
+    },
+    {
+        "number": 28,
+        "count": 88,
+        "titleAr": "القصص"
+    },
+    {
+        "number": 29,
+        "count": 69,
+        "titleAr": "العنكبوت"
+    },
+    {
+        "number": 30,
+        "count": 60,
+        "titleAr": "الروم"
+    },
+    {
+        "number": 31,
+        "count": 34,
+        "titleAr": "لقمان"
+    },
+    {
+        "number": 32,
+        "count": 30,
+        "titleAr": "السجدة"
+    },
+    {
+        "number": 33,
+        "count": 73,
+        "titleAr": "الأحزاب"
+    },
+    {
+        "number": 34,
+        "count": 54,
+        "titleAr": "سبأ"
+    },
+    {
+        "number": 35,
+        "count": 45,
+        "titleAr": "فاطر"
+    },
+    {
+        "number": 36,
+        "count": 83,
+        "titleAr": "يس"
+    },
+    {
+        "number": 37,
+        "count": 182,
+        "titleAr": "الصافات"
+    },
+    {
+        "number": 38,
+        "count": 88,
+        "titleAr": "ص"
+    },
+    {
+        "number": 39,
+        "count": 75,
+        "titleAr": "الزمر"
+    },
+    {
+        "number": 40,
+        "count": 85,
+        "titleAr": "غافر"
+    },
+    {
+        "number": 41,
+        "count": 54,
+        "titleAr": "فصلت"
+    },
+    {
+        "number": 42,
+        "count": 53,
+        "titleAr": "الشورى"
+    },
+    {
+        "number": 43,
+        "count": 89,
+        "titleAr": "الزخرف"
+    },
+    {
+        "number": 44,
+        "count": 59,
+        "titleAr": "الدخان"
+    },
+    {
+        "number": 45,
+        "count": 37,
+        "titleAr": "الجاثية"
+    },
+    {
+        "number": 46,
+        "count": 35,
+        "titleAr": "الأحقاف"
+    },
+    {
+        "number": 47,
+        "count": 38,
+        "titleAr": "محمد"
+    },
+    {
+        "number": 48,
+        "count": 29,
+        "titleAr": "الفتح"
+    },
+    {
+        "number": 49,
+        "count": 18,
+        "titleAr": "الحجرات"
+    },
+    {
+        "number": 50,
+        "count": 45,
+        "titleAr": "ق"
+    },
+    {
+        "number": 51,
+        "count": 60,
+        "titleAr": "الذاريات"
+    },
+    {
+        "number": 52,
+        "count": 49,
+        "titleAr": "الطور"
+    },
+    {
+        "number": 53,
+        "count": 62,
+        "titleAr": "النجم"
+    },
+    {
+        "number": 54,
+        "count": 55,
+        "titleAr": "القمر"
+    },
+    {
+        "number": 55,
+        "count": 78,
+        "titleAr": "الرحمن"
+    },
+    {
+        "number": 56,
+        "count": 96,
+        "titleAr": "الواقعة"
+    },
+    {
+        "number": 57,
+        "count": 29,
+        "titleAr": "الحديد"
+    },
+    {
+        "number": 58,
+        "count": 22,
+        "titleAr": "المجادلة"
+    },
+    {
+        "number": 59,
+        "count": 24,
+        "titleAr": "الحشر"
+    },
+    {
+        "number": 60,
+        "count": 13,
+        "titleAr": "الممتحنة"
+    },
+    {
+        "number": 61,
+        "count": 14,
+        "titleAr": "الصف"
+    },
+    {
+        "number": 62,
+        "count": 11,
+        "titleAr": "الجمعة"
+    },
+    {
+        "number": 63,
+        "count": 11,
+        "titleAr": "المنافقون"
+    },
+    {
+        "number": 64,
+        "count": 18,
+        "titleAr": "التغابن"
+    },
+    {
+        "number": 65,
+        "count": 12,
+        "titleAr": "الطلاق"
+    },
+    {
+        "number": 66,
+        "count": 12,
+        "titleAr": "التحريم"
+    },
+    {
+        "number": 67,
+        "count": 30,
+        "titleAr": "الملك"
+    },
+    {
+        "number": 68,
+        "count": 52,
+        "titleAr": "القلم"
+    },
+    {
+        "number": 69,
+        "count": 52,
+        "titleAr": "الحاقة"
+    },
+    {
+        "number": 70,
+        "count": 44,
+        "titleAr": "المعارج"
+    },
+    {
+        "number": 71,
+        "count": 28,
+        "titleAr": "نوح"
+    },
+    {
+        "number": 72,
+        "count": 28,
+        "titleAr": "الجن"
+    },
+    {
+        "number": 73,
+        "count": 20,
+        "titleAr": "المزمل"
+    },
+    {
+        "number": 74,
+        "count": 56,
+        "titleAr": "المدثر"
+    },
+    {
+        "number": 75,
+        "count": 40,
+        "titleAr": "القيامة"
+    },
+    {
+        "number": 76,
+        "count": 31,
+        "titleAr": "الإنسان"
+    },
+    {
+        "number": 77,
+        "count": 50,
+        "titleAr": "المرسلات"
+    },
+    {
+        "number": 78,
+        "count": 40,
+        "titleAr": "النبأ"
+    },
+    {
+        "number": 79,
+        "count": 46,
+        "titleAr": "النازعات"
+    },
+    {
+        "number": 80,
+        "count": 42,
+        "titleAr": "عبس"
+    },
+    {
+        "number": 81,
+        "count": 29,
+        "titleAr": "التكوير"
+    },
+    {
+        "number": 82,
+        "count": 19,
+        "titleAr": "الإنفطار"
+    },
+    {
+        "number": 83,
+        "count": 36,
+        "titleAr": "المطففين"
+    },
+    {
+        "number": 84,
+        "count": 25,
+        "titleAr": "الإنشقاق"
+    },
+    {
+        "number": 85,
+        "count": 22,
+        "titleAr": "البروج"
+    },
+    {
+        "number": 86,
+        "count": 17,
+        "titleAr": "الطارق"
+    },
+    {
+        "number": 87,
+        "count": 19,
+        "titleAr": "الأعلى"
+    },
+    {
+        "number": 88,
+        "count": 26,
+        "titleAr": "الغاشية"
+    },
+    {
+        "number": 89,
+        "count": 30,
+        "titleAr": "الفجر"
+    },
+    {
+        "number": 90,
+        "count": 20,
+        "titleAr": "البلد"
+    },
+    {
+        "number": 91,
+        "count": 15,
+        "titleAr": "الشمس"
+    },
+    {
+        "number": 92,
+        "count": 21,
+        "titleAr": "الليل"
+    },
+    {
+        "number": 93,
+        "count": 11,
+        "titleAr": "الضحى"
+    },
+    {
+        "number": 94,
+        "count": 8,
+        "titleAr": "الشرح"
+    },
+    {
+        "number": 95,
+        "count": 8,
+        "titleAr": "التين"
+    },
+    {
+        "number": 96,
+        "count": 19,
+        "titleAr": "العلق"
+    },
+    {
+        "number": 97,
+        "count": 5,
+        "titleAr": "القدر"
+    },
+    {
+        "number": 98,
+        "count": 8,
+        "titleAr": "البينة"
+    },
+    {
+        "number": 99,
+        "count": 8,
+        "titleAr": "الزلزلة"
+    },
+    {
+        "number": 100,
+        "count": 11,
+        "titleAr": "العاديات"
+    },
+    {
+        "number": 101,
+        "count": 11,
+        "titleAr": "القارعة"
+    },
+    {
+        "number": 102,
+        "count": 8,
+        "titleAr": "التكاثر"
+    },
+    {
+        "number": 103,
+        "count": 3,
+        "titleAr": "العصر"
+    },
+    {
+        "number": 104,
+        "count": 9,
+        "titleAr": "الهمزة"
+    },
+    {
+        "number": 105,
+        "count": 5,
+        "titleAr": "الفيل"
+    },
+    {
+        "number": 106,
+        "count": 4,
+        "titleAr": "قريش"
+    },
+    {
+        "number": 107,
+        "count": 7,
+        "titleAr": "الماعون"
+    },
+    {
+        "number": 108,
+        "count": 3,
+        "titleAr": "الكوثر"
+    },
+    {
+        "number": 109,
+        "count": 6,
+        "titleAr": "الكافرون"
+    },
+    {
+        "number": 110,
+        "count": 3,
+        "titleAr": "النصر"
+    },
+    {
+        "number": 111,
+        "count": 5,
+        "titleAr": "المسد"
+    },
+    {
+        "number": 112,
+        "count": 4,
+        "titleAr": "الإخلاص"
+    },
+    {
+        "number": 113,
+        "count": 5,
+        "titleAr": "الفلق"
+    },
+    {
+        "number": 114,
+        "count": 6,
+        "titleAr": "الناس"
+    }
+]

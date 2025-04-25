@@ -5,6 +5,8 @@ import { fetchSurah } from '../utils/api';
 import { useThemeColor } from '@/hooks/useThemeColor'; // Using alias setup
 import GlobalAudioPlayer from '../components/GlobalAudioPlayer';
 import { useAudio } from '../contexts/AudioContext';
+import { FontAwesome } from '@expo/vector-icons';
+import SettingsMenu from '../components/SettingsMenu';
 
 export default function ReadingScreen() {
   const [verses, setVerses] = useState([]);
@@ -14,6 +16,21 @@ export default function ReadingScreen() {
   const {
     stopPlayback
   } = useAudio();
+  const [settings, setSettings] = useState({
+    fontSize: 22,
+    showTranslation: false,
+    showTafsir: true,
+    currentSurah: 1,
+  });
+  const [isSettingsVisible, setIsSettingsVisible] = useState(false);
+
+  const handleSettingChange = (setting, value) => {
+    setSettings(prev => ({ ...prev, [setting]: value }));
+    if (setting === 'currentSurah' && value !== surah) {
+      setSurah(value);
+    }
+  };
+
   useEffect(() => {
     setLoading(true); // Set loading true when fetching starts
     fetchSurah(surah).then(data => {
@@ -21,7 +38,7 @@ export default function ReadingScreen() {
       if (data && data.verses) {
         const verses = data.verses.map((verse, index) => ({
           ...verse,
-          verse_number: index + 1
+          verse_number: surah === 1 ? index + 1 : index
         }));
         setTitle(data.titleAr);
         setVerses(verses);
@@ -52,22 +69,51 @@ export default function ReadingScreen() {
 
   const playlist = verses.map(verse => ({
     verseKey: verse.verse_key || `verse-${verse.verse_number}`,
-    audioUrl: verse.linkmp3?.[1]?.source || '',
+    audioUrl: verse.linkhls?.[0]?.source || '',
   })).filter(item => item.audioUrl);
   return (
     <View style={[styles.container, { backgroundColor }]}>
       <View style={styles.titleContainer}>
         <GlobalAudioPlayer playlist={playlist} />
         <Text style={[styles.surahTitle, { color: textColor }]}>سورة {title}</Text>
+        <TouchableOpacity
+          style={styles.settingsButton}
+          onPress={() => {
+            setIsSettingsVisible(true)
+          }
+          }
+        >
+          <FontAwesome name="cog" size={24} color={textColor} />
+        </TouchableOpacity>
       </View>
+
       <FlatList
         data={verses}
         keyExtractor={(item) => item.verse_key ?? `verse-${item.verse_number}`}
-        renderItem={({ item }) => <VerseItem verse={item} playlist={playlist} />}
+        renderItem={({ item }) => (
+          <VerseItem
+            verse={item}
+            playlist={playlist}
+            fontSize={settings.fontSize}
+            showTranslation={settings.showTranslation}
+            showTafsir={settings.showTafsir}
+          />
+        )}
         contentContainerStyle={styles.listContentContainer}
         ItemSeparatorComponent={() => <View style={[styles.separator, { backgroundColor: borderColor }]} />}
         ListEmptyComponent={<Text style={[styles.emptyText, { color: secondaryTextColor }]}>No verses found for this Surah.</Text>} // Handle empty state
       />
+
+      <SettingsMenu
+        visible={isSettingsVisible}
+        onClose={() => {
+          stopPlayback(); // Stop playback when opening settings
+          setIsSettingsVisible(false)
+        }}
+        settings={settings}
+        onSettingChange={handleSettingChange}
+      />
+
       <View style={[styles.buttonContainer, { borderTopColor: borderColor }]}>
         <TouchableOpacity
           style={[styles.button, { backgroundColor: cardBackgroundColor, borderColor }]}
@@ -101,7 +147,7 @@ const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     marginVertical: 20,
     paddingHorizontal: 20,
   },
@@ -146,5 +192,8 @@ const styles = StyleSheet.create({
     marginTop: 50,
     fontSize: 16,
     fontFamily: 'Roboto-Regular', // Use regular font for empty state
-  }
+  },
+  settingsButton: {
+    padding: 8,
+  },
 });

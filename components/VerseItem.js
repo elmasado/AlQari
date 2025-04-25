@@ -4,7 +4,7 @@ import { useThemeColor } from '@/hooks/useThemeColor';
 import AudioPlayer from './AudioPlayer';
 import { useAudio } from '../contexts/AudioContext';
 
-export default function VerseItem({ verse, playlist }) {
+export default function VerseItem({ verse, playlist, fontSize, showTranslation, showTafsir }) {
   const cardBackgroundColor = useThemeColor({}, 'cardBackground');
   const textColor = useThemeColor({}, 'text');
   const secondaryTextColor = useThemeColor({}, 'secondaryText');
@@ -14,16 +14,16 @@ export default function VerseItem({ verse, playlist }) {
   const { isPlaying, currentVerseKey } = useAudio();
   // console.log('Current Verse Key:', currentVerseKey);
   // Get the first available audio URL
-  const audioUrl = verse.linkmp3?.[1]?.source || '';
+  const audioUrl = verse.linkhls?.[0]?.source || '';
   const verseKey = verse.verse_key || `verse-${verse.verse_number}`;
   const isCurrentVerse = currentVerseKey === verseKey && isPlaying;
   
   return (
     <View style={[styles.container, { 
-        backgroundColor: cardBackgroundColor, 
-        borderColor: isCurrentVerse ? tintColor : borderColor,
-        borderWidth: isCurrentVerse ? 2 : StyleSheet.hairlineWidth,
-      }]}>
+      backgroundColor: cardBackgroundColor, 
+      borderColor: isCurrentVerse ? tintColor : borderColor,
+      borderWidth: isCurrentVerse ? 2 : StyleSheet.hairlineWidth,
+    }]}>
       <View style={styles.headerContainer}>
         {audioUrl && (
           <AudioPlayer
@@ -33,9 +33,12 @@ export default function VerseItem({ verse, playlist }) {
           />
         )}
         <View style={styles.arabicContainer}>
-          <Text style={[styles.arabic, { color: textColor }]}>
+          <Text style={[styles.arabic, { 
+            color: textColor,
+            fontSize: fontSize 
+          }]}>
             {verse.verse}
-            {verse.verse_number && (
+            { verse.verse_number > 0 && (
               <Text style={[styles.verseNumber, { color: secondaryTextColor }]}>
                 {' '}({verse.verse_number})
               </Text>
@@ -43,7 +46,18 @@ export default function VerseItem({ verse, playlist }) {
           </Text>
         </View>
       </View>
-      <Text style={[styles.translation, { color: secondaryTextColor }]}>{verse.enTranslation}</Text>
+      
+      {showTranslation && verse.enTranslation && (
+        <Text style={[styles.translation, { color: secondaryTextColor }]}>
+          {verse.enTranslation}
+        </Text>
+      )}
+      
+      {showTafsir && verse.arTranslation && (
+        <Text style={[styles.tafsir, { color: secondaryTextColor }]}>
+          {verse.arTranslation}
+        </Text>
+      )}
     </View>
   );
 }
@@ -82,5 +96,12 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto-Regular',
     lineHeight: 22,
     textAlign: 'left',
+  },
+  tafsir: {
+    fontSize: 14,
+    fontFamily: 'Roboto-Regular',
+    lineHeight: 20,
+    textAlign: 'right',
+    marginTop: 8,
   },
 });
