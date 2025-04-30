@@ -15,7 +15,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.elmasado.AlQari"
     },
     "web": {
       "bundler": "metro",
@@ -40,6 +41,14 @@
     "assetBundlePatterns": [
       "**/*",
       "assets/fonts/*.ttf"
-    ]
+    ],
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "b939d340-603f-4df6-959b-2671e0d8940f"
+      }
+    }
   }
 }

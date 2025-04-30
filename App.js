@@ -7,6 +7,7 @@ import { useFonts } from 'expo-font';
 import { AudioProvider } from './contexts/AudioContext';
 import ReadingScreen from './screens/ReadingScreen';
 import SearchScreen from './screens/SearchScreen';
+import AdhkarScreen from './screens/AdhkarScreen';
 import { Image } from 'react-native-elements';
 import { FontAwesome } from '@expo/vector-icons';
 
@@ -95,6 +96,21 @@ export default function App() {
                   size={size}
                   color={color}
                   opacity={focused ? 1 : 0.5} 
+                />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="Adhkar"
+            component={AdhkarScreen}
+            options={{
+              title: 'أذكار',
+              tabBarIcon: ({ focused, color, size }) => (
+                <FontAwesome
+                  name="book"
+                  size={size}
+                  color={color}
+                  opacity={focused ? 1 : 0.5}
                 />
               ),
             }}

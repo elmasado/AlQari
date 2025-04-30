@@ -16,10 +16,17 @@ export async function fetchSurah(surahNumber) {
 
 export async function searchVerses(query) {
   const response = await axios.post(
-    `${BASE_URL}/_search`,
+    `${BASE_URL}/quran/_search`,
     query,
     { auth: AUTH }
   );
   // console.log("search:", response);
   return response.data.hits.hits.map(hit => hit);
 }
+
+export async function fetchAdhkar() {
+  const response = await axios.get(`${BASE_URL}/adhkar/_search?size=300`, { auth: AUTH });
+  if (response.status !== 200) {
+    throw new Error('Failed to fetch adhkar');
+  }
+ return response.data.hits.hits.map(hit => hit._source);}
